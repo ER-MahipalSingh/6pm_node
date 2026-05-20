@@ -9,7 +9,8 @@ exports.generateToken = (id, res) => {
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     sameSite: "strict",
     httpOnly: true,
+    secure: true,
   };
-  res.cookie(token, option);
+  res.cookie("token", token, option);
   return token;
 };

@@ -47,7 +47,7 @@ exports.login = async (req, res) => {
   }
 
   user.password = undefined;
-  const token = generateToken(newUser.id, res);
+  const token = generateToken(user.id, res);
   res.status(201).json({ message: "Login done", user, token });
 };
 
