@@ -4,7 +4,7 @@ const User = require("../model/userModel");
 exports.isAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
-    console.log(token); 
+    // console.log(token); 
 
     if (!token) {
       return res.status(404).json({ message: "User is not valid" });
