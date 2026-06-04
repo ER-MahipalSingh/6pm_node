@@ -16,6 +16,6 @@ exports.isAuth = async (req, res, next) => {
     }
     next();
   } catch (error) {
-    console.log("Error", error);
+    console.log("Error: ", error);
   }
 };

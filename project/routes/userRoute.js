@@ -10,14 +10,17 @@ const {
   deleteUser,
   sendOTP,
   passReset,
+  adminLogin,
 } = require("../controller/userController");
 const { isAuth } = require("../middleware/isAuth");
+const { isAdmin } = require("../middleware/isAdmin");
 
 const router = express.Router();
 
 router.post("/register", register);
 router.post("/login", login);
-router.get("/get-all", isAuth, getUser);
+router.post("/admin-login", adminLogin);
+router.get("/get-all", isAuth, isAdmin, getUser);
 router.get("/me", isAuth, loadUser);
 router.get("/:id", isAuth, getSingleUser);
 router.put("/update", isAuth, updateUser);

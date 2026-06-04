@@ -19,7 +19,11 @@ exports.register = async (req, res) => {
 
     const hasPass = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({ name, email, password: hasPass });
+    const newUser = await User.create({
+      name,
+      email,
+      password: hasPass,
+    });
     const token = generateToken(newUser.id, res);
     res
       .status(201)
@@ -178,6 +182,31 @@ exports.passReset = async (req, res) => {
   const hashPass = await bcrypt.hash(password, 10);
   user.password = hashPass;
   await user.save();
-  await OTP.deleteOne({ email }); 
+  await OTP.deleteOne({ email });
   return res.status(201).json({ message: "Password Change successfully" });
+};
+
+exports.adminLogin = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(403).json({ message: "All fildes are require" });
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(403).json({ message: "User not found" });
+  }
+  if (user.role !== "Admin") {
+    return res.status(403).json({ message: "Admin not found" });
+  }
+  const passwordCom = await bcrypt.compare(password, user.password);
+  console.log(passwordCom);
+
+  if (!passwordCom) {
+    return res.status(403).json({ message: "email and password dosent match" });
+  }
+
+  user.password = undefined;
+  const token = generateToken(user.id, res);
+  res.status(201).json({ message: "Login done", user, token });
 };
